@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Test</title>
+</head>
+
+<body>
+<h1>Test</h1>
+
+<p id="data" style="font-size:40px;">Loading data...</p>
+
+<script>
+    const priceEl = document.getElementById("data");
+
+    const es = new EventSource("/data");
+    es.onerror = (err) => {
+        console.log("error: ", err)
+    };
+
+    es.onmessage = (msg) => {
+        console.log("onmessage", msg)
+    };
+
+    es.onopen = (...args) => {
+        console.log("onopen", args)
+    };
+
+    es.addEventListener("data", (event) => {
+        const parsedData = JSON.parse(event.data);
+        const data = parsedData.data;
+        priceEl.innerText = data;
+    });
+</script>
+</body>
+
+</html>
